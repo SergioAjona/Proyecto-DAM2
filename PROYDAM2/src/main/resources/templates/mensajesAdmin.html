@@ -1,0 +1,20 @@
+<h2>Mensajes de soporte</h2>
+<table>
+    <tr>
+        <th>Email</th>
+        <th>Mensaje</th>
+        <th>Tipo</th>
+        <th>Respuesta</th>
+    </tr>
+    <tr th:each="msg : ${mensajes}">
+        <td th:text="${msg.email}"></td>
+        <td th:text="${msg.message}"></td>
+        <td th:text="${msg.tipo}"></td>
+        <td>
+            <form th:action="@{'/soporte/admin/responder/' + ${msg.id}}" method="post">
+                <textarea name="respuesta" th:text="${msg.respuestaAdmin}"></textarea>
+                <button type="submit">Responder</button>
+            </form>
+        </td>
+    </tr>
+</table>
