@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <title>Baick</title>
+</head>
+
+<body>
+<header>
+    <img src="/imgs/logo_grande_final.png" alt="logo"/>
+
+    <nav class="menu">
+        <ul>
+            <li class="current-menu-item"><a href="/">Inicio</a></li>
+            <li class="current-menu-item"><a href="catalogo">Catálogo</a>
+                <ul>
+                    <li><a href="catalogo">Bicicletas</a>
+                        <ul>
+                            <li><a href="catalogo">Carretera</a></li>
+                            <li><a href="catalogo">Montaña</a></li>
+                            <li><a href="catalogo">Gravel</a></li>
+                            <li><a href="catalogo">Ciclocross</a></li>
+                            <li><a href="catalogo">BMX</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="catalogo">Niños</a>
+                        <ul>
+                            <li><a href="catalogo">Junior</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="current-menu-item"><a href="acercade.html">Acerca de</a></li>
+            <li class="current-menu-item"><a href="soporte.html">Contacto</a></li>
+
+            <div class="auth-links">
+                <button id="abrirLogin">Iniciar Sesión</button>
+                <button id="abrirRegistro">Registrarse</button>
+                <button id="cerrarSesion" style="display: none;">Cerrar Sesión</button>
+            </div>
+        </ul>
+    </nav>
+
+    <!-- Modal de Login -->
+    <div id="modalLogin" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar" id="cerrarLogin">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form id="formLogin">
+                <input type="email" id="emailLogin" placeholder="Correo electrónico" required />
+                <input type="password" id="contrasenaLogin" placeholder="Contraseña" required />
+                <button type="submit">Iniciar sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div id="modalRegistro" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar" id="cerrarRegistro">&times;</span>
+            <h2>Registrarse</h2>
+            <form id="formRegistro">
+                <input type="text" id="nombre" placeholder="Nombre completo" required>
+                <input type="text" id="apellido" placeholder="Apellido" required>
+                <input type="email" id="email" placeholder="Correo electrónico" required>
+                <input type="password" id="contrasena" placeholder="Contraseña" required>
+                <input type="text" id="dni" placeholder="DNI" required>
+                <input type="number" id="telefono" placeholder="Telefono" required>
+                <input type="text" id="ciudad" placeholder="Ciudad" required>
+                <button type="submit">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-cart">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        </svg>
+
+        <div class="count-products">
+            <span id="contador-productos">0</span>
+        </div>
+
+        <div class="container-cart-products hidden-cart">
+            <div class="cart-product">
+                <div class="info-cart-product">
+                    <span class="cantidad-producto-carrito">1</span>
+                    <p class="titulo-producto-carrito">producto</p>
+                    <span class="precio-producto-carrito">80€</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-close">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+
+                </div>
+            </div>
+            <div class="cart-total">
+                <h3>Total:</h3>
+                <span class="total-pagar">100€</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="gallery">
+    <div class="gallery-container">
+        <figure class="gallery-item" th:each="bici : ${bicicletas}">
+            <img class="slider-item" th:src="${bici.imagen}" />
+            <figcaption th:text="${bici.modelo}">Modelo</figcaption>
+        </figure>
+    </div>
+    <nav class="gallery-navigation">
+        <button class="nav-button prev-button"><</button>
+        <button class="nav-button next-button">></button>
+    </nav>
+
+    <div class="titulo-inicio-cat">
+        <h2>VARIEDAD DE CATÁLOGO</h2>
+    </div>
+
+    <div class="inicio-cat">
+        <a href="catalogo">
+            <div class="seccion">
+                <img src="https://i0.wp.com/bitke.es/wp-content/uploads/2023/10/bianchi-bicicleta-carretera-oltre-race-105-2024.jpg" alt="carretera"/>
+                <h3>CARRETERA</h3>
+            </div>
+        </a>
+        <a href="catalogo">
+            <div class="seccion">
+                <img src="https://i0.wp.com/bitke.es/wp-content/uploads/2023/10/bianchi-bicicleta-carretera-oltre-race-105-2024.jpg" alt="carretera"/>
+                <h3>MONTAÑA</h3>
+            </div>
+        </a>
+        <a href="catalogo">
+            <div class="seccion">
+                <img src="https://i0.wp.com/bitke.es/wp-content/uploads/2023/10/bianchi-bicicleta-carretera-oltre-race-105-2024.jpg" alt="carretera"/>
+                <h3>GRAVEL</h3>
+            </div>
+        </a>
+        <a href="catalogo">
+            <div class="seccion">
+                <img src="https://i0.wp.com/bitke.es/wp-content/uploads/2023/10/bianchi-bicicleta-carretera-oltre-race-105-2024.jpg" alt="carretera"/>
+                <h3>ENDURO</h3>
+            </div>
+        </a>
+        <a href="catalogo">
+            <div class="seccion">
+                <img src="https://i0.wp.com/bitke.es/wp-content/uploads/2023/10/bianchi-bicicleta-carretera-oltre-race-105-2024.jpg" alt="carretera"/>
+                <h3>ELÉCTRICAS</h3>
+            </div>
+        </a>
+        <a href="catalogo">
+            <div class="seccion">
+                <img src="https://i0.wp.com/bitke.es/wp-content/uploads/2023/10/bianchi-bicicleta-carretera-oltre-race-105-2024.jpg" alt="carretera"/>
+                <h3>JUNIOR</h3>
+            </div>
+        </a>
+    </div>
+
+    <div class="acercaB2">
+        <h2><strong>CONTACTO Y SOPORTE</strong></h2>
+        <p>Contacta con BAICK para resolver dudas o problemas. Agradecemos también sugerencias constructivas para mejorar nuestro servicio. !<a href="contacto.html">CONTÁCTANOS</a>¡</p>
+    </div>
+
+    <div class="acercaB2">
+        <h2><strong>ACERCA DE NUESTRA TIENDA</strong></h2>
+        <p>Infórmate sobre nuestra trayectoria y entérate de lo que ofrecemos. <a href="acercade.html">ACERCA DE NOSOTROS</a></p>
+    </div>
+</section>
+
+<script src="/js/ruletaMenu.js"></script>
+<script src="/js/modal.js"></script>
+<script src="/js/loginRegistro.js" type="module"></script>
+</body>
+
+</html>

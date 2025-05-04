@@ -1,0 +1,773 @@
+*::after,
+*::before,
+* {
+	margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0 auto;
+  font-family: "Russo One", sans-serif;
+  overflow-x: hidden;
+}
+
+.icon-cart {
+  width: 40px;
+  height: 40px;
+  stroke: black;
+}
+
+.icon-cart:hover {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 0 40px 0;
+  background-color: white;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.container-icon {
+  position: relative;
+  margin-right: 100px;
+}
+
+.container-icon svg {
+  width: 50px;
+  height: 50px;
+}
+
+.count-products {
+  position: absolute;
+  top: 35px;
+  right: -15px;
+  background-color: black;
+  color: white;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+#contador-productos {
+  font-size: 20px;
+}
+
+.container-cart-products {
+  position: absolute;
+  top: 50px;
+  background-color: white;
+  width: 400px;
+  right: 0;
+  z-index: 1;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  border-radius: 10px;
+}
+
+.cart-product {
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.info-cart-product {
+  display: flex;
+  justify-content: space-between;
+  flex: 0.8;
+}
+
+.titulo-producto-carrito {
+  font-size: 20px;
+}
+
+.precio-producto-carrito {
+  font-weight: 700;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.cantidad-producto-carrito {
+  font-weight 400;
+  font-size: 20px;
+}
+
+.icon-close {
+  width: 25px;
+  height: 25px;
+}
+
+.icon-close:hover {
+  stroke: red;
+  cursor: pointer;
+}
+
+.cart-total {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  gap: 20px;
+}
+
+.total-pagar {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.hidden-cart {
+  display: none;
+}
+
+.container-items {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.item {
+  border-radius: 10px;
+  border: 4px solid black;
+  margin: 25px;
+  cursor: pointer;
+}
+
+.item:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.info-product {
+  padding: 15px 30px;
+  line-height: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+  transition: all .5s;
+}
+
+.item figure {
+  overflow: hidden;
+}
+
+.item:hover img {
+  transform: scale(1.2);
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+header img {
+  margin-left: 150px;
+  width: 300px;
+  height: 100px;
+  object-fit: cover;
+}
+
+/*Bloques de Página Principal*/
+.titulo-inicio-cat {
+  width: 100%;
+  font-size: 60px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.titulo-inicio-cat h2 {
+  text-shadow: 0 10px 20px rgba(0,0,0,0.6);
+}
+
+.inicio-cat {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+}
+
+.seccion {
+  border-radius: 10px;
+  border: 3px solid black;
+  transition: border 0.25s ease;
+}
+
+.seccion:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  border: 3px solid white;
+}
+
+.seccion h3 {
+  padding: 15px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.seccion img {
+  width: 150%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+  transition: all .5s;
+}
+
+/*Bloques de información Catálogo*/
+.info-1 {
+  margin-top: 450px;
+  padding: 150px 0 150px 100px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+.texto {
+  position: relative;
+  display: flex;
+  text-align: left;
+  font-size: 30px;
+  padding: 20px;
+}
+
+.enlace a {
+  position: relative;
+  background: none;
+  text-align: center;
+  display: block;
+	color: black;
+	transition: color 1s ease;
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 30px;
+	line-height: 32px;
+	padding: 0px 55px;
+}
+
+.enlace a:hover {
+  border-radius: 30px;
+  color: white;
+  background-color: black;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+.info-2 {
+  padding: 150px 0 150px 100px;
+  box-shadow: 10px 0 20px rgba(0,0,0,0.8);
+  background-color: black;
+}
+
+.texto2 {
+  position: relative;
+  display: flex;
+  text-align: left;
+  font-size: 30px;
+  padding: 20px;
+  color: white;
+}
+
+.enlace2 a {
+  position: relative;
+  background: none;
+  text-align: center;
+  display: block;
+	color: white;
+	transition: color 1s ease;
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 30px;
+	line-height: 32px;
+	padding: 0px 55px;
+}
+
+.enlace2 a:hover {
+  border-radius: 30px;
+  color: black;
+  background-color: white;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+/*Bloques de Página de Contacto*/
+.titulo-contacto {
+  width: 100%;
+  font-size: 60px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.titulo-contacto h2 {
+  text-shadow: 0 10px 20px rgba(0,0,0,0.6);
+}
+
+.formulario {
+  margin: 50px 200px 50px 200px;
+  padding: 50px;
+  border: 10px solid black;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.formulario ul {
+  list-style: none;
+}
+
+.formulario li + li {
+  margin-top: 1em;
+}
+
+.formulario label {
+  display: inline-block;
+  width: 150px;
+  text-align: left;
+}
+
+.formulario input, textarea {
+  margin-top: 10px;
+  font: 1em sans-serif;
+  width: 300px;
+  padding: 5px;
+  box-sizing: border-box;
+  border: 1px solid #999;
+}
+
+.formulario input:focus, textarea:focus {
+  border-color: #000;
+}
+
+.formulario textarea {
+  vertical-align: top;
+  height: 5em;
+}
+
+.formulario button {
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 20px;
+  margin: 30px 0 0 90px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  background-color: white;
+  color: black;
+  border-color: 2px solid black;
+  transition: background-color 0.5s ease;
+  transition: color 0.5s ease;
+}
+
+.formulario button:hover {
+  margin-left: 90px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  background-color: black;
+  color: white;
+}
+
+/*Bloques de información Página de Acerca De*/
+.acercaB1 {
+  margin: 10px 0 10px 0;
+  padding: 150px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  transition: background-color 1s ease;
+}
+
+.acercaB1 h2 {
+  text-align: center;
+  position: relative;
+  font-size: 60px;
+  transition: color 1s ease;
+}
+
+.acercaB1 p {
+  text-align: center;
+  font-size: 30px;
+  color: white;
+  position: relative;
+}
+
+.acercaB1:hover {
+  background-color: black;
+}
+
+.acercaB2 {
+  margin: 10px 0 10px 0;
+  padding: 150px;
+  box-shadow: 0 10px 20px rgba(255,255,255,0.8);
+  background-color: black;
+  transition: background-color 1s ease;
+}
+
+.acercaB2 h2 {
+  text-align: center;
+  position: relative;
+  font-size: 60px;
+  color: white;
+}
+
+.acercaB2 p {
+  text-align: center;
+  font-size: 30px;
+  color: black;
+  position: relative;
+}
+
+.acercaB2:hover {
+  background-color: white;
+}
+
+/*Bloque de información Página del Producto*/
+.bloque-producto {
+  margin: 100px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.bloque-producto img {
+  overflow: hidden;
+  max-height: 800px;
+  max-width: 1000px;
+}
+
+.informacion-producto {
+  margin-left: 20%;
+  font-size: 30px;
+}
+
+.informacion-producto h2 {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.informacion-producto p {
+  margin: 20px 0 20px 0;
+}
+
+.informacion-producto button {
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 15px;
+  font-size: 30px;
+  margin: 30px 0 0 90px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  background-color: white;
+  color: black;
+  border-color: 2px solid black;
+  transition: background-color 0.5s ease;
+  transition: color 0.5s ease;
+}
+
+.informacion-producto button:hover {
+  margin-left: 90px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  background-color: black;
+  color: white;
+}
+
+.selector {
+    appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	max-width: 250px;
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	cursor: pointer;
+    padding: 7px 10px;
+    height: 50px;
+    outline: 0;
+    border: 0;
+	border-radius: 0;
+	background: #f0f0f0;
+	color: green;
+	font-size: 1em;
+	font-family: 'Russo One', sans-serif;
+	border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.selector:hover {
+  background: black;
+  color: green;
+}
+
+/*Pop up en el producto tras comprar*/
+.modal {   
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 100px;
+    left: 0;   top: 0;   width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {   
+    background-color: #fefefe;
+    margin: auto;   
+    padding: 20px;   
+    border: 1px solid #888;   
+    width: 80%;
+    text-align: center;
+}
+
+.close {   
+    color: #aaaaaa;   
+    float: right;   
+    font-size: 28px;   
+    font-weight: bold; 
+}
+
+.close:hover, .close:focus {   
+    color: #000;   
+    text-decoration: none;   
+    cursor: pointer; 
+} 
+
+/*Menu desplegable en la navegación*/
+.menu {
+	margin-top: 30px;
+	position: relative;
+    display: block;
+}
+
+.menu ul {
+	list-style: none;
+	position: relative;
+	float: left;
+	z-index: 1;
+}
+
+.menu ul a {
+	display: block;
+	color: black;
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 30px;
+	line-height: 32px;
+	padding: 0px 30px;
+    transition: color 1s ease;
+}
+
+.menu ul li {
+	position: relative;
+	float: left;
+	margin: 10px;
+	padding: 0;
+	border-radius: 30px;
+}
+
+.menu ul li ul li a {
+    color: black;
+    font-size: 20px;
+}
+
+.menu ul li.current-menu-item {
+	background: none;
+}
+
+.menu ul li:hover {
+    background-color: black;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+.menu ul li a:hover {
+  color: white;
+}
+
+.menu ul ul {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: white;
+	padding: 0;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+.menu ul ul li {
+	float: none;
+	width: 200px;
+}
+
+.menu ul ul a {
+	line-height: 120%;
+	padding: 10px 15px;
+}
+
+.menu ul ul ul {
+	top: 0;
+	left: 100%;
+}
+
+.menu ul li:hover > ul {
+	display: block;
+	border-radius: 10px 10px 30px 30px;
+}
+
+nav.menu .auth-links {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+}
+
+nav.menu .auth-links a {
+    font-size: 15px;
+    text-decoration: none;
+    color: #000; /* Color de los enlaces */
+    font-weight: bold;
+}
+
+/* Estilos para botones del modal y modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-contenido {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.cerrar {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+.auth-links button {
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+  border: none;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: 'Russo One', sans-serif;
+}
+
+.auth-links button:hover {
+    color: white;
+    background-color: black;
+}
+
+.modal button {
+    padding: 10px;
+    border: none;
+    color: white;
+    background-color: black;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Russo One', sans-serif;
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+}
+
+/* Estilo básico para la galería */
+figure {
+  margin: 0;
+}
+
+.galeria-fotos {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+}
+
+#gallery {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+}
+
+.gallery-container {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.gallery-item {
+  min-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.gallery-item figcaption {
+  margin-top: -80px;
+  align-items: center;
+}
+
+.gallery-item img {
+  height: 500px;
+  display: block;
+}
+
+/* Navegación de la galería */
+.gallery-navigation {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 40px);
+  margin: 0 20px;
+  position: absolute;
+  top: 25%;
+  transform: translateY(0%);
+}
+
+.nav-button {
+  background-color: rgba(0,0,0, .3);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.nav-button > span {
+  font-size: 30px;
+}
+
+.nav-button:hover {
+  background-color: black;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
