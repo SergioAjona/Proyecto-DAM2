@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -10,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <title>Baick</title>
 </head>
-
 <body>
 <header>
     <img src="/imgs/logo_grande_final.png" alt="logo"/>
@@ -80,13 +78,11 @@
 
 
     <div class="container-icon">
-        <a href="pago">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                 class="icon-cart">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
-            </svg>
-        </a>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="icon-cart">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+        </svg>
 
         <div class="count-products">
             <span id="contador-productos">0</span>
@@ -112,73 +108,12 @@
         </div>
     </div>
 </header>
-
-<main class="catalogo-wrapper">
-    <!-- Filtros laterales -->
-    <aside class="filtros-laterales">
-        <form th:action="@{/catalogo}" method="get">
-            <h3>Filtrar por</h3>
-
-            <!-- Filtro por tipo -->
-            <label for="tipo">Categoría</label>
-            <select name="tipo" id="tipo">
-                <option value="">Todas</option>
-                <option value="Carretera" th:selected="${tipo == 'Carretera'}">Carretera</option>
-                <option value="Montaña" th:selected="${tipo == 'Montaña'}">Montaña</option>
-                <option value="Gravel" th:selected="${tipo == 'Gravel'}">Gravel</option>
-                <option value="Enduro" th:selected="${tipo == 'Enduro'}">Enduro</option>
-                <option value="Eléctricas" th:selected="${tipo == 'Electricas'}">Eléctricas</option>
-                <option value="Junior" th:selected="${tipo == 'Junior'}">Junior</option>
-            </select>
-
-            <!-- Filtro por Precio -->
-            <label for="precio">Precio Máximo (€):</label>
-            <input type="range" id="precio" name="precioMax" min="0" max="20000" step="50" th:value="${precioMax != null ? precioMax : 0}" oninput="document.getElementById('precioLabel').textContent = '€ ' + this.value">
-            <span id="precioLabel" th:text="'€ ' + ${precioMax}">€ 0</span>
-
-            <!-- Filtro por Marca (checkbox) -->
-            <label for="marca">Marcas:</label>
-            <div id="marca" class="marcas-checkboxes">
-                <label><input type="checkbox" name="marca" value="Bianchi" th:checked="${marca != null and marca.contains('Bianchi')}"> Bianchi</label><br>
-                <label><input type="checkbox" name="marca" value="Conor" th:checked="${marca != null and marca.contains('Conor')}"> Conor</label><br>
-                <label><input type="checkbox" name="marca" value="Merida" th:checked="${marca != null and marca.contains('Merida')}"> Merida</label><br>
-                <label><input type="checkbox" name="marca" value="Orbea" th:checked="${marca != null and marca.contains('Orbea')}"> Orbea</label><br>
-                <label><input type="checkbox" name="marca" value="Santa Cruz" th:checked="${marca != null and marca.contains('Santa Cruz')}"> Santa Cruz</label><br>
-                <label><input type="checkbox" name="marca" value="Scott" th:checked="${marca != null and marca.contains('Scott')}"> Scott</label><br>
-                <label><input type="checkbox" name="marca" value="Specialized" th:checked="${marca != null and marca.contains('Specialized')}"> Specialized</label><br>
-                <label><input type="checkbox" name="marca" value="Trek" th:checked="${marca != null and marca.contains('Trek')}"> Trek</label><br>
-            </div>
-
-            <!-- Filtro por Stock -->
-            <label for="stock">Stock:</label>
-            <div class="marcas-checkboxes">
-                <label><input type="checkbox" id="stock" name="stock" th:checked="${stock}">Solo mostrar productos en stock</label>
-            </div>
-
-            <!-- Botón de filtro -->
-            <button type="submit">Aplicar Filtros</button>
-        </form>
-    </aside>
-
-<div class="container-items">
-    <div th:each="bicicleta : ${bicicletas}" class="container-item">
-        <div class="item">
-            <figure>
-                <img th:src="${bicicleta.imagen}"/>
-            </figure>
-            <div class="info-product">
-                <h2 th:text="${bicicleta.marca}">Marca</h2>
-                <h3 th:text="${bicicleta.modelo}">Modelo</h3>
-                <p class="precio" th:text="${bicicleta.precio + '€'}">Precio</p>
-                <p th:if="${bicicleta.stock <= 0}" class="sin-stock">Sin stock</p>
-                <button>Ver</button>
-            </div>
-        </div>
-    </div>
+<div class="error">
+    <h1>¡Ha ocurrido un error!</h1>
+    <a href="/">Volver al inicio</a>
 </div>
-</main>
+
 <script src="/js/loginRegistro.js"></script>
 <script src="/js/modal.js"></script>
 </body>
-
 </html>

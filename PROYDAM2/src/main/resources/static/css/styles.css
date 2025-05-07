@@ -855,3 +855,92 @@ figure {
   background-color: black;
   box-shadow: 0 10px 20px rgba(0,0,0,0.8);
 }
+
+/* Página de error */
+.error {
+    align-items: center;
+    justify-content: center;
+}
+
+.error h1 {
+    margin-top: 100px;
+    font-size: 140px;
+    text-align: center;
+    animation: changeColor 3s infinite alternate;
+}
+
+.error a {
+    display: block;
+    margin-top: 180px;
+    font-size: 60px;
+    text-align: center;
+}
+
+/* Definir la animación que cambia el color en error */
+@keyframes changeColor {
+    0% {
+        color: #000000;
+    }
+    50% {
+        color: #800000;
+    }
+    100% {
+        color: #000000;
+    }
+}
+
+/* Vista de Pago */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.container h1 {
+  text-align: center;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.summary, .payment-form {
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+input[type="text"], input[type="email"], input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.btn {
+  background-color: rgba(0,0,0, .3);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: "Russo One", sans-serif;
+}
+
+.btn:hover {
+  background-color: black;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}

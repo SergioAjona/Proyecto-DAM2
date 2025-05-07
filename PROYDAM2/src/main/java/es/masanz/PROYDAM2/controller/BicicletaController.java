@@ -27,7 +27,7 @@ public class BicicletaController {
 
         // Si no hay filtros, todos los productos se muestran
         if (marca != null) {
-            model.addAttribute("marcas", marca);
+            model.addAttribute("marca", marca);
         } else {
             marca = new ArrayList<>(); // Evitar que 'marcas' sea null
         }
@@ -57,4 +57,11 @@ public class BicicletaController {
         model.addAttribute("bicicletas", bicicletaService.obtenerProductos());
         return "index"; // nombre del HTML Thymeleaf
     }
+
+    @GetMapping("/pago")
+    public String pago(Model model) {
+        model.addAttribute("bici", "hola");
+        return "pago"; // nombre del HTML Thymeleaf
+    }
+
 }
