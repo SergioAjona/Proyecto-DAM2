@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+  <title>Baick</title>
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="titulo-contacto">
+  <h2>INICIAR SESIÓN</h2>
+</div>
+
+<div class="formulario">
+  <form th:action="@{/login}" th:object="${Usuario}" method="post">
+    <ul>
+      <li>
+        <label for="email">Correo electrónico:</label>
+        <input type="text" id="email" th:field="*{email}" required />
+      </li>
+      <li>
+        <label for="contraseña">Contraseña:</label>
+        <input type="password" id="contraseña" th:field="*{contrasena}" required />
+      </li>
+    </ul>
+    <button type="submit">ENTRAR</button>
+  </form>
+
+  <div th:if="${error}">
+    <p th:text="${error}" style="color: red;"></p>
+  </div>
+  <div th:if="${mensaje}">
+    <p th:text="${mensaje}" style="color: green;"></p>
+  </div>
+
+</div>
+
+</body>
+
+</html>

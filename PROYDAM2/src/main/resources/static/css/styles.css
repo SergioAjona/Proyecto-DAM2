@@ -103,7 +103,7 @@ header {
 }
 
 .cantidad-producto-carrito {
-  font-weight 400;
+  font-weight: 400;
   font-size: 20px;
 }
 
@@ -188,7 +188,7 @@ header img {
   object-fit: cover;
 }
 
-/*Bloques de Página Principal*/
+/* Bloques de Página Principal */
 .titulo-inicio-cat {
   width: 100%;
   font-size: 60px;
@@ -233,7 +233,7 @@ header img {
   transition: all .5s;
 }
 
-/*Bloques de información Catálogo*/
+/* Bloques de información Catálogo */
 .info-1 {
   margin-top: 450px;
   padding: 150px 0 150px 100px;
@@ -389,7 +389,7 @@ header img {
     margin-top: 10px;
 }
 
-/*Bloques de Página de Contacto*/
+/* Bloques de Página de Contacto */
 .titulo-contacto {
   width: 100%;
   font-size: 60px;
@@ -462,7 +462,7 @@ header img {
   color: white;
 }
 
-/*Bloques de información Página de Acerca De*/
+/* Bloques de información Página de Acerca De */
 .acercaB1 {
   margin: 10px 0 10px 0;
   padding: 150px;
@@ -514,7 +514,7 @@ header img {
   background-color: white;
 }
 
-/*Bloque de información Página del Producto*/
+/* Bloque de información Página del Producto */
 .bloque-producto {
   margin: 100px;
   display: grid;
@@ -591,42 +591,7 @@ header img {
   color: green;
 }
 
-/*Pop up en el producto tras comprar*/
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    padding-top: 100px;
-    left: 0;   top: 0;   width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    text-align: center;
-}
-
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover, .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/*Menu desplegable en la navegación*/
+/* Menu desplegable en la navegación */
 .menu {
 	margin-top: 30px;
 	position: relative;
@@ -718,71 +683,6 @@ nav.menu .auth-links a {
     text-decoration: none;
     color: #000; /* Color de los enlaces */
     font-weight: bold;
-}
-
-/* Estilos para botones del modal y modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.5);
-}
-
-.modal-contenido {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 400px;
-}
-
-.cerrar {
-  float: right;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-input[type="text"], input[type="email"], input[type="password"] {
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0;
-  box-sizing: border-box;
-}
-
-.auth-links button {
-  width: 100%;
-  padding: 10px;
-  background-color: white;
-  border: none;
-  color: black;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-family: 'Russo One', sans-serif;
-}
-
-.auth-links button:hover {
-    color: white;
-    background-color: black;
-}
-
-.modal button {
-    padding: 10px;
-    border: none;
-    color: white;
-    background-color: black;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: 'Russo One', sans-serif;
-}
-
-.acciones {
-  display: flex;
-  gap: 10px;
 }
 
 /* Estilo básico para la galería */
@@ -943,4 +843,52 @@ input[type="text"], input[type="email"], input[type="number"] {
 .btn:hover {
   background-color: black;
   box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+/* Contenedor de los botones Stock para Administrador */
+.product-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.product-container button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin: 10px;
+}
+
+.btn-sumar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-sumar:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.btn-restar {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-restar:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+}
+
+.stock-label {
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 10px 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  text-align: center;
+  min-width: 100px;
 }

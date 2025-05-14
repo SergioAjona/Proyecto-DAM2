@@ -1,0 +1,60 @@
+<header>
+    <img src="/imgs/logo_grande_final.png" alt="logo"/>
+
+    <nav class="menu">
+        <ul>
+            <li class="current-menu-item"><a href="/">Inicio</a></li>
+            <li class="current-menu-item"><a href="catalogo">Catálogo</a>
+                <ul>
+                    <li><a href="catalogo">Bicicletas</a>
+                        <ul>
+                            <li><a href="catalogo?tipo=Carretera">Carretera</a></li>
+                            <li><a href="catalogo?tipo=Montaña">Montaña</a></li>
+                            <li><a href="catalogo?tipo=Gravel">Gravel</a></li>
+                            <li><a href="catalogo?tipo=Enduro">Enduro</a></li>
+                            <li><a href="catalogo?tipo=Electrica">Eléctricas</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="catalogo?tipo=Junior">Niños</a>
+                        <ul>
+                            <li><a href="catalogo?tipo=Junior">Junior</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="current-menu-item"><a href="acercade">Acerca de</a></li>
+            <li class="current-menu-item"><a href="soporte">Contacto</a></li>
+        </ul>
+
+        <div class="auth-links">
+            <ul>
+                <!-- Botones para login y registro solo si no hay sesión -->
+                <li th:if="${session.uid == null}">
+                    <a href="/login">Iniciar sesión</a>
+                </li>
+                <li th:if="${session.uid == null}">
+                    <a href="/registro">Registrar</a>
+                </li>
+
+                <!-- Botón de cerrar sesión solo si hay sesión activa -->
+                <li th:if="${session.uid != null}">
+                    <a href="/logout">Cerrar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-icon">
+        <a href="/carrito">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                 class="icon-cart">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+            </svg>
+        </a>
+
+        <div class="count-products">
+            <span id="contador-productos" th:text="${cantidadCarrito}"></span>
+        </div>
+    </div>
+</header>

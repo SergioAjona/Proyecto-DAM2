@@ -16,98 +16,32 @@
 </head>
 <body>
 
-<header>
-  <img src="/imgs/logo_grande_final.png" alt="logo"/>
-
-  <nav class="menu">
-    <ul>
-      <li class="current-menu-item"><a href="/">Inicio</a></li>
-      <li class="current-menu-item"><a href="catalogo">Catálogo</a>
-        <ul>
-          <li><a href="catalogo">Bicicletas</a>
-            <ul>
-              <li><a href="catalogo">Carretera</a></li>
-              <li><a href="catalogo">Montaña</a></li>
-              <li><a href="catalogo">Gravel</a></li>
-              <li><a href="catalogo">Enduro</a></li>
-              <li><a href="catalogo">Eléctricas</a></li>
-            </ul>
-          </li>
-          <li><a href="catalogo">Niños</a>
-            <ul>
-              <li><a href="catalogo">Junior</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li class="current-menu-item"><a href="acercade.html">Acerca de</a></li>
-      <li class="current-menu-item"><a href="contacto.html">Contacto</a></li>
-    </ul>
-  </nav>
-
-
-  <div class="container-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-         class="icon-cart">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
-    </svg>
-
-    <div class="count-products">
-      <span id="contador-productos">0</span>
-    </div>
-
-    <div class="container-cart-products hidden-cart">
-      <div class="cart-product">
-        <div class="info-cart-product">
-          <span class="cantidad-producto-carrito">1</span>
-          <p class="titulo-producto-carrito">producto</p>
-          <span class="precio-producto-carrito">80€</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-               stroke="currentColor" class="icon-close">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
-          </svg>
-
-        </div>
-      </div>
-      <div class="cart-total">
-        <h3>Total:</h3>
-        <span class="total-pagar">100€</span>
-      </div>
-    </div>
-  </div>
-</header>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <div class="container">
   <h1>Finalizar Compra</h1>
 
-  <div class="section cart">
+  <div th:each="bicicleta : ${carrito}" class="section cart">
     <h2>Tu carrito</h2>
     <div class="cart-item">
-      <span th:text="${bici}">Bicicleta MTB X-Track</span>
-      <span>$899.00</span>
-    </div>
-    <div class="cart-item">
-      <span>Casco de ciclismo ProSafe</span>
-      <span>$59.00</span>
+      <span th:text="${bicicleta.marca} + ' ' + ${bicicleta.modelo}"></span>
+      <span th:text="${bicicleta.precio}">€</span>
     </div>
   </div>
 
   <div class="section summary">
     <h2>Resumen del pedido</h2>
-    <p>Subtotal: $958.00</p>
-    <p>Envío: $5.00</p>
-    <p><strong>Total: $978.00</strong></p>
+    <p th:text="Total: ${total}€"><strong></strong></p>
   </div>
 
   <div class="section formularioPago">
     <h2>Datos de pago</h2>
-    <form action="/procesar-pago" method="POST">
+    <form action="/pago/confirmar" method="post" th:object="${datosPago}">
       <label for="name">Nombre completo</label>
-      <input type="text" id="name" name="name" required>
+      <input type="text" id="name" name="name" text="${usuario.nombre}" required>
 
       <label for="email">Correo electrónico</label>
-      <input type="email" id="email" name="email" required>
+      <input type="email" id="email" name="email" text="${usuario.email}" required>
 
       <label for="entrega">Dirección de entrega</label>
       <input type="text" id="entrega" name="entrega" required>
@@ -121,7 +55,7 @@
       <label for="cvv">CVV</label>
       <input type="number" id="cvv" name="cvv" required>
 
-      <button type="submit" class="btn">REALIZAR PAGO $978.00</button>
+      <button type="submit" class="btn" th:text="REALIZAR PAGO ${total}€"></button>
     </form>
   </div>
 </div>
