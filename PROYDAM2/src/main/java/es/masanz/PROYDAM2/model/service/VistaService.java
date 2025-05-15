@@ -28,7 +28,7 @@ public class VistaService {
 
     private FirebaseService fb = new FirebaseService();
 
-    public String registerUser(Usuario usuario) throws Exception {
+    public String registrarUsuario(Usuario usuario) throws Exception {
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                 .setEmail(usuario.getEmail())
                 .setPassword(usuario.getContrasena());
@@ -45,7 +45,7 @@ public class VistaService {
         return uid;
     }
 
-    public String loginUser(String email, String password) throws IOException, JSONException {
+    public String logearUsuario(String email, String password) throws IOException, JSONException {
         String apiKey = "AIzaSyCjzd8E1YA34ayRIrENxIEP9ifQAD83xns";
         URL url = new URL("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey);
 
@@ -63,7 +63,6 @@ public class VistaService {
         String response = in.lines().collect(Collectors.joining());
         in.close();
 
-        // Extraer el idToken y localId (uid)
         JSONObject jsonResponse = new JSONObject(response);
         String idToken = jsonResponse.getString("idToken");
         String uid = jsonResponse.getString("localId");
@@ -71,12 +70,10 @@ public class VistaService {
         return uid;
     }
 
-    // Método para obtener todos los productos de Firestore
     public List<Bicicleta> filtrarProductos(String tipo, Double precioMax, List<String> marca, boolean soloEnStock) {
         CollectionReference productosRef = fb.getFirestore().collection("bicicletas");
         Query query = productosRef;
 
-        // Si no se aplica ningún filtro, se devuelven todos los productos
         if (tipo != null && !tipo.isEmpty()) {
             query = query.whereEqualTo("tipo", tipo);
         }
@@ -90,10 +87,8 @@ public class VistaService {
             query = query.whereGreaterThan("stock", 0);
         }
 
-        // Recuperar las bicicletas filtradas
         List<Bicicleta> bicicletas = new ArrayList<>();
         try {
-            // Ejecutar la consulta
             QuerySnapshot snapshot = query.get().get();
             for (DocumentSnapshot doc : snapshot.getDocuments()) {
                 Bicicleta bicicleta = doc.toObject(Bicicleta.class);
@@ -175,21 +170,18 @@ public class VistaService {
             DocumentSnapshot document = future.get();
 
             if (document.exists()) {
-                // Obtener carrito existente o inicializar uno nuevo
                 List<String> carrito = (List<String>) document.get("carrito");
 
                 if (carrito == null) {
                     carrito = new ArrayList<>();
                 }
 
-                carrito.add(productoId); // Agregar producto al carrito
+                carrito.add(productoId);
 
-                // Actualizar el documento
                 ApiFuture<WriteResult> writeResult = usuarioRef.update("carrito", carrito);
                 System.out.println("Carrito actualizado: " + writeResult.get().getUpdateTime());
 
             } else {
-                // Si el documento no existe, lo creamos con el producto en el carrito
                 Map<String, Object> nuevoUsuario = Map.of("carrito", List.of(productoId));
                 ApiFuture<WriteResult> writeResult = usuarioRef.set(nuevoUsuario);
                 System.out.println("Documento creado: " + writeResult.get().getUpdateTime());
@@ -199,5 +191,84 @@ public class VistaService {
             e.printStackTrace();
             throw new RuntimeException("Error al agregar el producto al carrito: " + e.getMessage());
         }
+    }
+
+    public List<Map<String, Object>> obtenerCarritoConDetalles(String uid) throws Exception {
+        DocumentSnapshot usuarioDoc = fb.getFirestore().collection("usuarios").document(uid).get().get();
+
+        List<Map<String, Object>> carritoConDetalles = new ArrayList<>();
+
+        if (!usuarioDoc.exists()) {
+            return carritoConDetalles;
+        }
+
+        List<String> carritoIds = (List<String>) usuarioDoc.get("carrito");
+        if (carritoIds != null) {
+            for (String productoId : carritoIds) {
+                if (productoId != null) {
+                    DocumentSnapshot productoDoc = fb.getFirestore().collection("bicicletas").document(productoId).get().get();
+                    if (productoDoc.exists()) {
+                        Map<String, Object> producto = productoDoc.getData();
+                        producto.put("id", productoId);
+                        carritoConDetalles.add(producto);
+                    }
+                }
+            }
+        }
+
+        return carritoConDetalles;
+    }
+
+    public void eliminarProductoDelCarrito(String uid, String productoId) throws Exception {
+        DocumentReference usuarioRef = fb.getFirestore().collection("usuarios").document(uid);
+
+        DocumentSnapshot snapshot = usuarioRef.get().get();
+        List<String> carrito = (List<String>) snapshot.get("carrito");
+
+        if (carrito != null && !carrito.isEmpty()) {
+            for (String producto : carrito) {
+                if (producto.equals(productoId)) {
+                    carrito.remove(producto);
+                    break;
+                }
+            }
+
+            usuarioRef.update("carrito", carrito);
+        }
+    }
+
+    public void vaciarCarrito(String uid) throws Exception {
+        DocumentReference usuarioRef = fb.getFirestore().collection("usuarios").document(uid);
+    
+        Map<String, Object> actualizacion = new HashMap<>();
+        actualizacion.put("carrito", new ArrayList<>());
+    
+        usuarioRef.update(actualizacion);
+    }
+    
+    public double calcularTotalCarrito(List<Map<String, Object>> carritoConDetalles) {
+        double total = 0.0;
+    
+        for (Map<String, Object> producto : carritoConDetalles) {
+            if (producto != null && producto.get("precio") != null) {
+                try {
+                    Object precioObj = producto.get("precio");
+                    double precio = 0.0;
+    
+                    if (precioObj instanceof Number) {
+                        precio = ((Number) precioObj).doubleValue();
+                    } else if (precioObj instanceof String) {
+                        precio = Double.parseDouble((String) precioObj);
+                    }
+    
+                    total += precio;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException("Error al agregar el precio del producto: " + e.getMessage());
+                }
+            }
+        }
+    
+        return total;
     }
 }

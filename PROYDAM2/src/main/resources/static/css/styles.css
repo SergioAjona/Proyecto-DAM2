@@ -389,6 +389,12 @@ header img {
     margin-top: 10px;
 }
 
+.mensajeConf {
+    max-width: 100%;
+    text-align: center;
+    font-size: 40px;
+}
+
 /* Bloques de Página de Contacto */
 .titulo-contacto {
   width: 100%;
@@ -810,7 +816,7 @@ figure {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #ddd;
-  padding: 10px 0;
+  padding: 2px 0;
 }
 
 .summary, .payment-form {

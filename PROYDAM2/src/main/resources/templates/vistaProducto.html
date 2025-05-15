@@ -15,13 +15,6 @@
 
 <div th:replace="~{fragments/header :: header}"></div>
 
-<div th:if="${mensaje}">
-    <p th:text="${mensaje}" style="color: green;"></p>
-</div>
-<div th:if="${error}">
-    <p th:text="${error}" style="color: red;"></p>
-</div>
-
 <div class="bloque-producto">
     <form th:action="@{/carrito/agregar}" method="post">
         <img th:src="${bicicleta.imagen}" alt="producto"/>

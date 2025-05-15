@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="https://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Finalizar Compra - Tienda de Bicicletas</title>
+  <title>Finalizar Compra</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <head>
@@ -21,27 +21,27 @@
 <div class="container">
   <h1>Finalizar Compra</h1>
 
+  <h2>Tu carrito</h2>
   <div th:each="bicicleta : ${carrito}" class="section cart">
-    <h2>Tu carrito</h2>
     <div class="cart-item">
       <span th:text="${bicicleta.marca} + ' ' + ${bicicleta.modelo}"></span>
-      <span th:text="${bicicleta.precio}">€</span>
+      <p><span th:text="${bicicleta.precio}"></span>€</p>
     </div>
   </div>
 
   <div class="section summary">
     <h2>Resumen del pedido</h2>
-    <p th:text="Total: ${total}€"><strong></strong></p>
+    <p><strong>Total: <span th:text="${total}"></span> €</strong></p>
   </div>
 
   <div class="section formularioPago">
     <h2>Datos de pago</h2>
-    <form action="/pago/confirmar" method="post" th:object="${datosPago}">
+    <form th:action="@{/pago/confirmar}" method="post">
       <label for="name">Nombre completo</label>
-      <input type="text" id="name" name="name" text="${usuario.nombre}" required>
+      <input type="text" id="name" name="name" th:value="${usuarioNombre}" required>
 
       <label for="email">Correo electrónico</label>
-      <input type="email" id="email" name="email" text="${usuario.email}" required>
+      <input type="email" id="email" name="email" th:value="${usuarioEmail}" required>
 
       <label for="entrega">Dirección de entrega</label>
       <input type="text" id="entrega" name="entrega" required>
@@ -55,7 +55,7 @@
       <label for="cvv">CVV</label>
       <input type="number" id="cvv" name="cvv" required>
 
-      <button type="submit" class="btn" th:text="REALIZAR PAGO ${total}€"></button>
+      <button type="submit" class="btn">REALIZAR PAGO <span th:text="${total}"></span>€</button>
     </form>
   </div>
 </div>

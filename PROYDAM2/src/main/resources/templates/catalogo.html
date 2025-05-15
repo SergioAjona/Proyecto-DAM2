@@ -15,6 +15,15 @@
 
 <div th:replace="~{fragments/header :: header}"></div>
 
+<div class="mensajeConf">
+    <div th:if="${mensaje}">
+        <p th:text="${mensaje}" style="color: green;"></p>
+    </div>
+    <div th:if="${error}">
+        <p th:text="${error}" style="color: red;"></p>
+    </div>
+</div>
+
 <main class="catalogo-wrapper">
     <!-- Filtros laterales -->
     <aside class="filtros-laterales">
@@ -65,17 +74,17 @@
 <div class="container-items">
     <div th:each="bicicleta : ${bicicletas}" class="container-item">
         <div class="item">
-            <figure>
-                <img th:src="${bicicleta.imagen}"/>
-            </figure>
-            <div class="info-product">
-                <a th:href="@{'/catalogo/' + ${bicicleta.id}}">
+            <a th:href="@{'/catalogo/' + ${bicicleta.id}}">
+                <figure>
+                    <img th:src="${bicicleta.imagen}"/>
+                </figure>
+                <div class="info-product">
                     <h2 th:text="${bicicleta.marca}">Marca</h2>
                     <h3 th:text="${bicicleta.modelo}">Modelo</h3>
                     <p class="precio" th:text="${bicicleta.precio + '€'}">Precio</p>
                     <p th:if="${bicicleta.stock <= 0}" class="sin-stock">Sin stock</p>
-                </a>
-            </div>
+                </div>
+            </a>
             <div class="product-container" th:if="${session.usuario != null and session.usuario.rol == 'admin'}">
                 <form th:action="@{/catalogo/{id}/sumar(id=${bicicleta.id})}" method="post">
                     <button type="submit" class="btn-sumar">+</button>

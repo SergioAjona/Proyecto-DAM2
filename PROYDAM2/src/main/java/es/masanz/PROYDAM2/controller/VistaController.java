@@ -36,7 +36,7 @@ public class VistaController {
     @PostMapping("/registro")
     public String registrarUsuario(@ModelAttribute("Usuario") Usuario usuario, Model model) {
         try {
-            vistaService.registerUser(usuario);
+            vistaService.registrarUsuario(usuario);
             return "redirect:/login?registroExitoso";
         } catch (Exception e) {
             model.addAttribute("error", "Error al registrar usuario: " + e.getMessage());
@@ -62,7 +62,7 @@ public class VistaController {
     public String login(@ModelAttribute Usuario usuario, HttpSession session, Model model) {
         try {
             // Login con Firebase (esto ya lo tienes)
-            String uid = vistaService.loginUser(usuario.getEmail(), usuario.getContrasena());
+            String uid = vistaService.logearUsuario(usuario.getEmail(), usuario.getContrasena());
 
             // Obtener rol desde Firestore
             Firestore db = FirestoreClient.getFirestore();
@@ -132,12 +132,28 @@ public class VistaController {
     @GetMapping("/")
     public String galeria(Model model) {
         model.addAttribute("bicicletas", vistaService.obtenerProductos());
-        return "index"; // nombre del HTML Thymeleaf
+        return "index";
     }
 
     @GetMapping("/pago")
-    public String pago(Model model) {
-        model.addAttribute("bici", "hola");
+    public String pago(HttpSession session, Model model) throws Exception {
+        String uid = (String) session.getAttribute("uid");
+
+        if (uid == null) {
+            return "redirect:/login";
+        }
+
+        Firestore fb = FirestoreClient.getFirestore();
+        DocumentReference usuarioRef = fb.collection("usuarios").document(uid);
+
+        List<Map<String, Object>> carritoConDetalles = vistaService.obtenerCarritoConDetalles(uid);
+        double total = vistaService.calcularTotalCarrito(carritoConDetalles);
+
+        model.addAttribute("carrito", carritoConDetalles);
+        model.addAttribute("total", total);
+        model.addAttribute("usuarioNombre", usuarioRef.get().get().get("nombre") + " " + usuarioRef.get().get().get("apellido"));
+        model.addAttribute("usuarioEmail", usuarioRef.get().get().get("email"));
+
         return "pago";
     }
 
@@ -177,30 +193,7 @@ public class VistaController {
             return "redirect:/login";
         }
 
-        Firestore db = FirestoreClient.getFirestore();
-        DocumentSnapshot usuarioDoc = db.collection("usuarios").document(uid).get().get();
-
-        if (!usuarioDoc.exists()) {
-            model.addAttribute("carrito", new ArrayList<>());
-            return "carrito";
-        }
-
-        List<String> carritoIds = (List<String>) usuarioDoc.get("carrito");
-        List<Map<String, Object>> carritoConDetalles = new ArrayList<>();
-
-        if (carritoIds != null) {
-            for (String productoId : carritoIds) {
-                if (productoId != null) {
-                    DocumentSnapshot productoDoc = db.collection("bicicletas").document(productoId).get().get();
-                    if (productoDoc.exists()) {
-                        Map<String, Object> producto = productoDoc.getData();
-                        producto.put("id", productoId);
-                        carritoConDetalles.add(producto);
-                    }
-                }
-            }
-        }
-
+        List<Map<String, Object>> carritoConDetalles = vistaService.obtenerCarritoConDetalles(uid);
         model.addAttribute("carrito", carritoConDetalles);
         return "carrito";
     }
@@ -216,12 +209,7 @@ public class VistaController {
         }
 
         try {
-            Firestore db = FirestoreClient.getFirestore();
-            DocumentReference usuarioRef = db.collection("usuarios").document(uid);
-
-            // Agregar el ID del producto al array 'carrito' usando arrayUnion
-            usuarioRef.update("carrito", FieldValue.arrayUnion(productoId));
-
+            vistaService.agregarProductoAlCarrito(uid, productoId);
             redirectAttributes.addFlashAttribute("mensaje", "Producto agregado al carrito.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al agregar al carrito: " + e.getMessage());
@@ -241,12 +229,7 @@ public class VistaController {
         }
 
         try {
-            Firestore db = FirestoreClient.getFirestore();
-            DocumentReference usuarioRef = db.collection("usuarios").document(uid);
-
-            // Eliminar el producto del array usando arrayRemove
-            usuarioRef.update("carrito", FieldValue.arrayRemove(productoId));
-
+            vistaService.eliminarProductoDelCarrito(uid, productoId);
             redirectAttributes.addFlashAttribute("mensaje", "Producto eliminado del carrito.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al eliminar del carrito: " + e.getMessage());
@@ -255,7 +238,7 @@ public class VistaController {
         return "redirect:/carrito";
     }
 
-    @PostMapping("/carrito/vaciar")
+    @PostMapping("/pago/confirmar")
     public String vaciarCarrito(HttpSession session, RedirectAttributes redirectAttributes) {
         String uid = (String) session.getAttribute("uid");
 
@@ -264,15 +247,7 @@ public class VistaController {
         }
 
         try {
-            Firestore db = FirestoreClient.getFirestore();
-            DocumentReference usuarioRef = db.collection("usuarios").document(uid);
-
-            // Sobrescribir el campo 'carrito' con un array vacío
-            Map<String, Object> actualizacion = new HashMap<>();
-            actualizacion.put("carrito", new ArrayList<>());
-
-            usuarioRef.update(actualizacion);
-
+            vistaService.vaciarCarrito(uid);
             redirectAttributes.addFlashAttribute("mensaje", "Carrito vaciado correctamente.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al vaciar el carrito: " + e.getMessage());
@@ -280,6 +255,7 @@ public class VistaController {
 
         return "redirect:/";
     }
+
 
     @GetMapping("/acercade")
     public String verAcercaDe() {
