@@ -37,8 +37,14 @@ public class VistaService {
         String uid = userRecord.getUid();
 
         Map<String, Object> userMap = new HashMap<>();
+        userMap.put("id", uid);
         userMap.put("nombre", usuario.getNombre());
+        userMap.put("apellido", usuario.getApellido());
         userMap.put("email", usuario.getEmail());
+        userMap.put("contrasena", usuario.getContrasena());
+        userMap.put("ciudad", usuario.getCiudad());
+        userMap.put("dni", usuario.getDni());
+        userMap.put("telefono", usuario.getTelefono());
 
         fb.getFirestore().collection("usuarios").document(uid).set(userMap);
 

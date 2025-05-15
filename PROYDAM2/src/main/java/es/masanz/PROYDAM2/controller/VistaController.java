@@ -15,10 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -29,7 +26,7 @@ public class VistaController {
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
-        model.addAttribute("usuario", new Usuario());
+        model.addAttribute("Usuario", new Usuario());
         return "registro";
     }
 
@@ -37,7 +34,7 @@ public class VistaController {
     public String registrarUsuario(@ModelAttribute("Usuario") Usuario usuario, Model model) {
         try {
             vistaService.registrarUsuario(usuario);
-            return "redirect:/login?registroExitoso";
+            return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("error", "Error al registrar usuario: " + e.getMessage());
             return "registro";
@@ -46,14 +43,11 @@ public class VistaController {
 
     @GetMapping("/login")
     public String mostrarFormularioLogin(Model model,
-                                         @RequestParam(value = "error", required = false) String error,
-                                         @RequestParam(value = "registroExitoso", required = false) String registroExitoso) {
+                                         @RequestParam(value = "error", required = false) String error) {
         if (error != null) {
             model.addAttribute("error", "Credenciales inválidas");
         }
-        if (registroExitoso != null) {
-            model.addAttribute("mensaje", "Registro exitoso, ahora puedes iniciar sesión");
-        }
+
         model.addAttribute("Usuario", new Usuario());
         return "login";
     }

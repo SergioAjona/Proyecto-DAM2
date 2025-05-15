@@ -20,6 +20,10 @@
 </div>
 
 <div class="formulario">
+  <div th:if="${error}">
+    <p th:text="${error}" style="color: red;"></p>
+  </div>
+
   <form th:action="@{/login}" th:object="${Usuario}" method="post">
     <ul>
       <li>
@@ -33,13 +37,6 @@
     </ul>
     <button type="submit">ENTRAR</button>
   </form>
-
-  <div th:if="${error}">
-    <p th:text="${error}" style="color: red;"></p>
-  </div>
-  <div th:if="${mensaje}">
-    <p th:text="${mensaje}" style="color: green;"></p>
-  </div>
 
 </div>
 

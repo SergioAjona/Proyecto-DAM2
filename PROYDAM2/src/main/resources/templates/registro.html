@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
 </div>
 
 <div class="formulario">
-    <form th:action="@{/registro}" th:object="@{Usuario}" method="post">
+    <form th:action="@{/registro}" th:object="${Usuario}" method="post">
         <ul>
             <li>
                 <label for="nombre">Nombre:</label>
@@ -40,7 +40,7 @@
             </li>
             <li>
                 <label for="ciudad">Ciudad:</label>
-                <input type="password" id="ciudad" th:field="*{ciudad}" />
+                <input type="text" id="ciudad" th:field="*{ciudad}" />
             </li>
             <li>
                 <label for="dni">DNI:</label>
