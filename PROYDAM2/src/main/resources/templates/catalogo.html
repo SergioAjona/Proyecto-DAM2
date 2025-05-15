@@ -85,7 +85,7 @@
                     <p th:if="${bicicleta.stock <= 0}" class="sin-stock">Sin stock</p>
                 </div>
             </a>
-            <div class="product-container" th:if="${session.usuario != null and session.usuario.rol == 'admin'}">
+            <div class="product-container" th:if="${admin}">
                 <form th:action="@{/catalogo/{id}/sumar(id=${bicicleta.id})}" method="post">
                     <button type="submit" class="btn-sumar">+</button>
                 </form>

@@ -170,29 +170,37 @@ public class VistaService {
 
     public void agregarProductoAlCarrito(String uid, String productoId) {
         DocumentReference usuarioRef = fb.getFirestore().collection("usuarios").document(uid);
+        DocumentReference biciRef = fb.getFirestore().collection("bicicletas").document(productoId);
 
         try {
             ApiFuture<DocumentSnapshot> future = usuarioRef.get();
             DocumentSnapshot document = future.get();
 
-            if (document.exists()) {
-                List<String> carrito = (List<String>) document.get("carrito");
+            ApiFuture<DocumentSnapshot> futureBici = biciRef.get();
+            DocumentSnapshot docBici = futureBici.get();
 
-                if (carrito == null) {
-                    carrito = new ArrayList<>();
-                }
-
-                carrito.add(productoId);
-
-                ApiFuture<WriteResult> writeResult = usuarioRef.update("carrito", carrito);
-                System.out.println("Carrito actualizado: " + writeResult.get().getUpdateTime());
-
+            Long stock = docBici.getLong("stock");
+            if (stock == null || stock <= 0) {
+                throw new RuntimeException("Error al agregar el producto al carrito: ");
             } else {
-                Map<String, Object> nuevoUsuario = Map.of("carrito", List.of(productoId));
-                ApiFuture<WriteResult> writeResult = usuarioRef.set(nuevoUsuario);
-                System.out.println("Documento creado: " + writeResult.get().getUpdateTime());
-            }
+                if (document.exists()) {
+                    List<String> carrito = (List<String>) document.get("carrito");
 
+                    if (carrito == null) {
+                        carrito = new ArrayList<>();
+                    }
+
+                    carrito.add(productoId);
+
+                    ApiFuture<WriteResult> writeResult = usuarioRef.update("carrito", carrito);
+                    System.out.println("Carrito actualizado: " + writeResult.get().getUpdateTime());
+
+                } else {
+                    Map<String, Object> nuevoUsuario = Map.of("carrito", List.of(productoId));
+                    ApiFuture<WriteResult> writeResult = usuarioRef.set(nuevoUsuario);
+                    System.out.println("Documento creado: " + writeResult.get().getUpdateTime());
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error al agregar el producto al carrito: " + e.getMessage());

@@ -1,5 +1,6 @@
 package es.masanz.PROYDAM2.controller;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
@@ -94,7 +95,12 @@ public class VistaController {
             @RequestParam(required = false) Double precioMax,
             @RequestParam(required = false) List<String> marca,
             @RequestParam(required = false, defaultValue = "false") boolean soloEnStock,
-            Model model) {
+            Model model, HttpSession session) {
+        String uid = (String) session.getAttribute("uid");
+
+        if (uid != null && "admin".equals(session.getAttribute("rol"))) {
+            model.addAttribute("admin", true);
+        }
 
         // Si no hay filtros, todos los productos se muestran
         if (marca != null) {
@@ -155,29 +161,52 @@ public class VistaController {
     public String verProducto(@PathVariable String id, Model model) throws ExecutionException, InterruptedException {
         Bicicleta bicicleta = vistaService.findById(id);
         model.addAttribute("bicicleta", bicicleta);
+
+        Firestore db = FirestoreClient.getFirestore();
+        DocumentReference biciRef = db.collection("bicicletas").document(id);
+
+        ApiFuture<DocumentSnapshot> futureBici = biciRef.get();
+        DocumentSnapshot docBici = futureBici.get();
+
+        Long stock = docBici.getLong("stock");
+        if (stock == null || stock <= 0) {
+            model.addAttribute("unidades", false);
+        } else {
+            model.addAttribute("unidades", true);
+        }
         return "vistaProducto";
     }
 
     @PostMapping("/catalogo/{id}/sumar")
-    public String sumarStock(@PathVariable String id) {
-        try {
-            vistaService.sumarStock(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
+    public String sumarStock(@PathVariable String id, HttpSession session) {
+        String uid = (String) session.getAttribute("uid");
+
+        if (uid != null && "admin".equals(session.getAttribute("rol"))) {
+            try {
+                vistaService.sumarStock(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "error";
+            }
+            return "redirect:/catalogo";
         }
-        return "redirect:/catalogo/" + id;
+        return "error";
     }
 
     @PostMapping("/catalogo/{id}/restar")
-    public String restarStock(@PathVariable String id) {
-        try {
-            vistaService.restarStock(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
+    public String restarStock(@PathVariable String id, HttpSession session) {
+        String uid = (String) session.getAttribute("uid");
+
+        if (uid != null && "admin".equals(session.getAttribute("rol"))) {
+            try {
+                vistaService.restarStock(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "error";
+            }
+            return "redirect:/catalogo";
         }
-        return "redirect:/catalogo/" + id;
+        return "error";
     }
 
     @GetMapping("/carrito")
@@ -195,7 +224,7 @@ public class VistaController {
     @PostMapping("/carrito/agregar")
     public String agregarProductoAlCarrito(@RequestParam("productoId") String productoId,
                                            HttpSession session,
-                                           RedirectAttributes redirectAttributes) {
+                                           RedirectAttributes redirectAttributes, Model model) {
         String uid = (String) session.getAttribute("uid");
 
         if (uid == null) {
@@ -204,6 +233,7 @@ public class VistaController {
 
         try {
             vistaService.agregarProductoAlCarrito(uid, productoId);
+            vistaService.restarStock(productoId);
             redirectAttributes.addFlashAttribute("mensaje", "Producto agregado al carrito.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al agregar al carrito: " + e.getMessage());
@@ -224,6 +254,7 @@ public class VistaController {
 
         try {
             vistaService.eliminarProductoDelCarrito(uid, productoId);
+            vistaService.sumarStock(productoId);
             redirectAttributes.addFlashAttribute("mensaje", "Producto eliminado del carrito.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al eliminar del carrito: " + e.getMessage());
