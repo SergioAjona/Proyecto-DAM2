@@ -15,27 +15,27 @@
 
 <div th:replace="~{fragments/header :: header}"></div>
 
-<h2>Mensajes de soporte</h2>
-<table>
-    <tr>
-        <th>Email</th>
-        <th>Mensaje</th>
-        <th>Tipo</th>
-        <th>Respuesta</th>
-    </tr>
-    <tr th:each="msg : ${mensajes}">
-        <td th:text="${msg.email}"></td>
-        <td th:text="${msg.message}"></td>
-        <td th:text="${msg.tipo}"></td>
-        <td>
-            <form th:action="@{'/soporte/admin/responder/' + ${msg.id}}" method="post">
-                <textarea name="respuesta" th:text="${msg.respuestaAdmin}"></textarea>
-                <button type="submit">Responder</button>
-            </form>
-        </td>
-    </tr>
-</table>
+<h1>Mensajes de Soporte</h1>
 
+<div th:if="${#lists.isEmpty(mensajes)}">
+    <p>No hay mensajes pendientes.</p>
+</div>
+
+<div th:each="mensaje : ${mensajes}" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+    <p><strong>De:</strong> <span th:text="${mensaje.usuarioEmail}"></span></p>
+    <p><strong>Asunto:</strong> <span th:text="${mensaje.asunto}"></span></p>
+    <p><strong>Mensaje:</strong></p>
+    <p th:text="${mensaje.contenido}"></p>
+
+    <form th:action="@{/admin/mensajes/responder}" method="post" style="margin-top: 15px;">
+        <input type="hidden" name="mensajeId" th:value="${mensaje.id}" />
+        <label>Respuesta:</label><br>
+        <textarea name="responseText" rows="4" cols="60" required></textarea><br><br>
+        <button type="submit">Enviar respuesta</button>
+    </form>
+</div>
+
+<a href="/" style="display: block; margin-top: 40px;">Volver al inicio</a>
 </body>
 
 </html>
