@@ -47,7 +47,7 @@ public class VistaController {
             vistaService.registrarUsuario(usuario);
             return "redirect:/login";
         } catch (Exception e) {
-            model.addAttribute("error", "Error al registrar usuario: " + e.getMessage());
+            model.addAttribute("error", "Error al registrar usuario");
             return "registro";
         }
     }
@@ -274,7 +274,15 @@ public class VistaController {
     }
 
     @PostMapping("/pago/confirmar")
-    public String confirmarPago(HttpSession session, RedirectAttributes redirectAttributes) {
+    public String confirmarPago(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String entrega,
+            @RequestParam String card,
+            @RequestParam String exp,
+            @RequestParam String cvv,
+            HttpSession session, RedirectAttributes redirectAttributes) {
+
         String uid = (String) session.getAttribute("uid");
 
         if (uid == null) {
@@ -282,8 +290,44 @@ public class VistaController {
             return "redirect:/login";
         }
 
+        // Validación de los campos del formulario
+        if (name == null || name.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "El nombre completo es obligatorio.");
+            return "redirect:/pago";
+        }
+
+        if (email == null || email.trim().isEmpty() || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            redirectAttributes.addFlashAttribute("error", "El correo electrónico es obligatorio y debe tener un formato válido.");
+            return "redirect:/pago";
+        }
+
+        if (entrega == null || entrega.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "La dirección de entrega es obligatoria.");
+            return "redirect:/pago";
+        }
+
+        if (card == null || card.trim().isEmpty() || !card.matches("\\d{4} \\d{4} \\d{4} \\d{4}")) {
+            redirectAttributes.addFlashAttribute("error", "El número de tarjeta debe tener el formato correcto (XXXX XXXX XXXX XXXX).");
+            return "redirect:/pago";
+        }
+
+        if (exp == null || exp.trim().isEmpty() || !exp.matches("\\d{2}/\\d{2}")) {
+            redirectAttributes.addFlashAttribute("error", "La fecha de expiración debe tener el formato MM/AA.");
+            return "redirect:/pago";
+        }
+
+        if (cvv == null || cvv.trim().isEmpty() || !cvv.matches("\\d{3}")) {
+            redirectAttributes.addFlashAttribute("error", "El CVV debe tener 3 dígitos.");
+            return "redirect:/pago";
+        }
+
         try {
+            // Si pasa las validaciones, proceder con la lógica de pago
             List<Map<String, Object>> carrito = vistaService.obtenerCarritoConDetalles(uid);
+            if (carrito.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Carrito vacío");
+                return "redirect:/carrito";
+            }
             session.setAttribute("carritoPostPago", carrito);
             vistaService.vaciarCarrito(uid);
             redirectAttributes.addFlashAttribute("mensaje", "Pago confirmado.");
@@ -293,6 +337,7 @@ public class VistaController {
             return "redirect:/carrito";
         }
     }
+
 
     @GetMapping("/pago/factura")
     public void generarFactura(HttpSession session, HttpServletResponse response) throws Exception {

@@ -18,6 +18,12 @@
 
 <div th:replace="~{fragments/header :: header}"></div>
 
+<div class="mensajeConf">
+  <div th:if="${error}">
+    <p th:text="${error}" style="color: red;"></p>
+  </div>
+</div>
+
 <div class="container">
   <h1>Finalizar Compra</h1>
 
@@ -47,13 +53,13 @@
       <input type="text" id="entrega" name="entrega" required>
 
       <label for="card">Número de tarjeta</label>
-      <input type="text" id="card" name="card" placeholder="1234 5678 9012 3456" required>
+      <input type="text" id="card" name="card" placeholder="1234 5678 9012 3456" pattern="\d{4} \d{4} \d{4} \d{4}" required>
 
       <label for="exp">Fecha de expiración</label>
-      <input type="text" id="exp" name="exp" placeholder="MM/AA" required>
+      <input type="text" id="exp" name="exp" placeholder="MM/AA" pattern="\d{2}/\d{2}" required>
 
       <label for="cvv">CVV</label>
-      <input type="number" id="cvv" name="cvv" required>
+      <input type="number" id="cvv" name="cvv" required pattern="\d{3}">
 
       <button type="submit" class="btn">REALIZAR PAGO <span th:text="${total}"></span>€</button>
     </form>
