@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: spring-boot-app
-    env: java
-    buildCommand: |
-      apt-get update && apt-get install -y maven
-      mvn clean install
-    startCommand: "java -jar target/your-app.jar"
-    plan: free
