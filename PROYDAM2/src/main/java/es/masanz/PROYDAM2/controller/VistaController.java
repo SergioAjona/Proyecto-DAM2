@@ -1,10 +1,13 @@
 package es.masanz.PROYDAM2.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import es.masanz.PROYDAM2.model.service.FirebaseService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -271,23 +274,51 @@ public class VistaController {
     }
 
     @PostMapping("/pago/confirmar")
-    public String vaciarCarrito(HttpSession session, RedirectAttributes redirectAttributes) {
+    public String confirmarPago(HttpSession session, RedirectAttributes redirectAttributes) {
         String uid = (String) session.getAttribute("uid");
 
         if (uid == null) {
+            redirectAttributes.addFlashAttribute("error", "Usuario no autenticado.");
             return "redirect:/login";
         }
 
         try {
+            List<Map<String, Object>> carrito = vistaService.obtenerCarritoConDetalles(uid);
+            session.setAttribute("carritoPostPago", carrito);
             vistaService.vaciarCarrito(uid);
-            redirectAttributes.addFlashAttribute("mensaje", "Carrito vaciado correctamente.");
+            redirectAttributes.addFlashAttribute("mensaje", "Pago confirmado.");
+            return "confirmacion-pago";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al vaciar el carrito: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error al confirmar el pago: " + e.getMessage());
+            return "redirect:/carrito";
         }
-
-        return "redirect:/";
     }
 
+    @GetMapping("/pago/factura")
+    public void generarFactura(HttpSession session, HttpServletResponse response) throws Exception {
+        String uid = (String) session.getAttribute("uid");
+        FirebaseService fb = new FirebaseService();
+        DocumentReference usuarioRef = fb.getFirestore().collection("usuarios").document(uid);
+        String nombre = usuarioRef.get().get().getString("nombre");
+        String apellido = usuarioRef.get().get().getString("apellido");
+
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> carrito = (List<Map<String, Object>>) session.getAttribute("carritoPostPago");
+
+        if (carrito == null || carrito.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No hay carrito disponible para generar la factura.");
+            return;
+        }
+
+        double total = carrito.stream()
+                .mapToDouble(item -> ((Number) item.get("precio")).doubleValue())
+                .sum();
+
+        vistaService.generarFacturaPdfDesdeDatos(nombre, apellido, carrito, total, response);
+
+        // marcar que ya se generó para no permitir múltiples descargas
+        session.removeAttribute("carritoPostPago");
+    }
 
     @GetMapping("/acercade")
     public String verAcercaDe() {
@@ -304,4 +335,5 @@ public class VistaController {
         model.addAttribute("admin", true);
         return "soporte";
     }
+
 }

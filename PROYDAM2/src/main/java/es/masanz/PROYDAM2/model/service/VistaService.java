@@ -1,15 +1,22 @@
 package es.masanz.PROYDAM2.model.service;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
+import com.lowagie.text.DocumentException;
 import es.masanz.PROYDAM2.model.entity.Bicicleta;
 import es.masanz.PROYDAM2.model.entity.Usuario;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +32,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class VistaService {
+
+    @Autowired
+    private SpringTemplateEngine templateEngine;
 
     private FirebaseService fb = new FirebaseService();
 
@@ -285,4 +295,27 @@ public class VistaService {
     
         return total;
     }
+
+    public void generarFacturaPdfDesdeDatos(String nombre, String apellido, List<Map<String, Object>> carrito, double total, HttpServletResponse response) throws Exception {
+        Context context = new Context();
+        context.setVariable("nombre", nombre);
+        context.setVariable("apellido", apellido);
+        context.setVariable("carrito", carrito);
+        context.setVariable("total", total);
+
+        String htmlContent = templateEngine.process("factura", context);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=baick-factura-" + Timestamp.now().toDate().getTime() + ".pdf");
+
+        try (OutputStream outputStream = response.getOutputStream()) {
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(htmlContent);
+            renderer.layout();
+            renderer.createPDF(outputStream);
+        } catch (DocumentException e) {
+            throw new RuntimeException("Error al generar el PDF", e);
+        }
+    }
+
 }
