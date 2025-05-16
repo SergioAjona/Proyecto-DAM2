@@ -29,31 +29,32 @@
 
 <div class="formulario">
     <form th:action="@{/soporte/enviar}" method="post">
-        <ul>
-            <li>
-                <label for="asunto">Asunto a tratar:</label>
-                <select type="text" id="asunto" name="asunto" class="selector">
-                    <option value="Problema o incidencia con el funcionamiento de la página o pago">
-                        Problema o incidencia con el funcionamiento de la página o pago
-                    </option>
-                    <option value="Duda o pregunta sobre las funcionalidades de la página o trámites">
+      <div>
+        <label for="asunto">Asunto a tratar:</label>
+        <select type="text" id="asunto" name="asunto" class="selector">
+            <option value="Problema o incidencia con el funcionamiento de la página o pago">
+                Problema o incidencia con el funcionamiento de la página o pago
+            </option>
+            <option value="Duda o pregunta sobre las funcionalidades de la página o trámites">
                         Duda o pregunta sobre las funcionalidades de la página o trámites
-                    </option>
-                    <option value="Sugerencias y propuestas para la mejora en el funcionamiento de la página">
-                        Sugerencias y propuestas para la mejora en el funcionamiento de la página
-                    </option>
-                </select>
-            </li>
-            <li>
-                <label for="contenido">Describe tu problema:</label>
-                <textarea id="contenido" name="contenido" required></textarea>
-            </li>
-        </ul>
+            </option>
+            <option value="Sugerencias y propuestas para la mejora en el funcionamiento de la página">
+                Sugerencias y propuestas para la mejora en el funcionamiento de la página
+            </option>
+        </select>
+      </div>
+      <div>
+        <label for="contenido">Describe tu problema:</label>
+        <textarea id="contenido" name="contenido" required></textarea>
+      </div>
         <button type="submit">Enviar</button>
     </form>
 
     <a href="/" style="display: block; margin-top: 30px;">Volver al inicio</a>
 
+</div>
+<div class="enlace">
+  <a href="/admin/mensajes" th:if="${admin}">Administrar Mensajes</a>
 </div>
 
 </body>

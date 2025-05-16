@@ -17,7 +17,7 @@
 
 <div class="bloque-producto">
     <form th:action="@{/carrito/agregar}" method="post">
-        <img th:src="${bicicleta.imagen}" alt="producto"/>
+        <img class="imagenProducto" th:src="${bicicleta.imagen}" alt="producto"/>
         <div class="informacion-producto">
             <h2 th:text="${bicicleta.marca} + ' ' + ${bicicleta.modelo}"></h2>
             <p th:text="${bicicleta.descripcion}"></p>

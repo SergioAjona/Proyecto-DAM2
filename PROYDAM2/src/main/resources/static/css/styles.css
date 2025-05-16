@@ -201,7 +201,8 @@ header img {
 }
 
 .inicio-cat {
-  margin-top: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 50px;
@@ -408,11 +409,22 @@ header img {
 }
 
 .formulario {
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
   margin: 50px 200px 50px 200px;
   padding: 50px;
   border: 10px solid black;
   border-radius: 20px;
   text-align: center;
+  align-items: center;
+}
+
+.formulario form div {
+  display: flex;
+  gap: 20px;
+  text-align: center;
+  align-items: center;
 }
 
 .formulario ul {
@@ -424,12 +436,11 @@ header img {
 }
 
 .formulario label {
-  display: inline-block;
   width: 150px;
   text-align: left;
 }
 
-.formulario input, textarea {
+.formulario form input, textarea {
   margin-top: 10px;
   font: 1em sans-serif;
   width: 300px;
@@ -522,19 +533,31 @@ header img {
 
 /* Bloque de información Página del Producto */
 .bloque-producto {
-  margin: 100px;
+  margin: 20px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
-.bloque-producto img {
+.bloque-producto form {
+  min-width: 1800px;
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 20px;
+  background-color: #f9f9f9;
+}
+
+.imagenProducto {
   overflow: hidden;
-  max-height: 800px;
-  max-width: 1000px;
+  min-height: 500px;
+  min-width: 800px;
+  border: 2px solid black;
 }
 
 .informacion-producto {
-  margin-left: 20%;
+  margin-left: 5%;
   font-size: 30px;
 }
 
@@ -569,27 +592,25 @@ header img {
 }
 
 .selector {
-    appearance: none;
+  appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
-	max-width: 250px;
 	position: relative;
 	display: inline-block;
 	width: 100%;
 	cursor: pointer;
-    padding: 7px 10px;
-    height: 50px;
-    outline: 0;
-    border: 0;
+  padding: 7px 10px;
+  height: 40px;
+  outline: 0;
 	border-radius: 0;
 	background: #f0f0f0;
 	color: green;
 	font-size: 1em;
 	font-family: 'Russo One', sans-serif;
 	border: 2px solid rgba(0,0,0,0.2);
-    border-radius: 12px;
-    position: relative;
-    transition: all 0.25s ease;
+  border-radius: 12px;
+  position: relative;
+  transition: all 0.25s ease;
 }
 
 .selector:hover {
@@ -726,6 +747,7 @@ figure {
 .gallery-item figcaption {
   margin-top: -80px;
   align-items: center;
+  margin-left: 300px;
 }
 
 .gallery-item img {

@@ -9,7 +9,7 @@ document.querySelector('.next-button').addEventListener('click', () => {
 });
 
 const galleryContainer = document.querySelector('.gallery-container');
-galleryContainer.style.transform = `translateX(40%)`;
+galleryContainer.style.transform = `translateX(32%)`;
 
 function navigate(direction) {
    const galleryContainer = document.querySelector('.gallery-container');
@@ -18,9 +18,9 @@ function navigate(direction) {
    currentIndex = (currentIndex + direction + totalImages) % totalImages;
    const offset = -currentIndex * 100;
    if (offset == 0) {
-     galleryContainer.style.transform = `translateX(40%)`;
+     galleryContainer.style.transform = `translateX(32%)`;
    } else {
-     galleryContainer.style.transform = `translateX(${offset + 40}%)`;
+     galleryContainer.style.transform = `translateX(${offset + 32}%)`;
    }
 
 

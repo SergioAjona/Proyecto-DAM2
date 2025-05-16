@@ -15,13 +15,13 @@
 
 <div th:replace="~{fragments/header :: header}"></div>
 
-<h1>Mensajes de Soporte</h1>
+<h1 class="titulo-contacto">Mensajes de Soporte</h1>
 
-<div th:if="${#lists.isEmpty(mensajes)}">
+<div class="titulo-contacto" th:if="${#lists.isEmpty(mensajes)}">
     <p>No hay mensajes pendientes.</p>
 </div>
 
-<div th:each="mensaje : ${mensajes}" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+<div class="formulario" th:each="mensaje : ${mensajes}" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
     <p><strong>De:</strong> <span th:text="${mensaje.usuarioEmail}"></span></p>
     <p><strong>Asunto:</strong> <span th:text="${mensaje.asunto}"></span></p>
     <p><strong>Mensaje:</strong></p>
@@ -35,7 +35,6 @@
     </form>
 </div>
 
-<a href="/" style="display: block; margin-top: 40px;">Volver al inicio</a>
 </body>
 
 </html>

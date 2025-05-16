@@ -76,7 +76,7 @@ public class VistaService {
         return uid;
     }
 
-    public List<Bicicleta> filtrarProductos(String tipo, Double precioMax, List<String> marca, boolean soloEnStock) {
+    public List<Bicicleta> filtrarProductos(String tipo, Double precioMax, List<String> marca, boolean stock) {
         CollectionReference productosRef = fb.getFirestore().collection("bicicletas");
         Query query = productosRef;
 
@@ -89,7 +89,7 @@ public class VistaService {
         if (marca != null && !marca.isEmpty()) {
             query = query.whereIn("marca", marca);
         }
-        if (soloEnStock) {
+        if (stock) {
             query = query.whereGreaterThan("stock", 0);
         }
 

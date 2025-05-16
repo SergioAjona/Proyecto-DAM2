@@ -1,23 +1,30 @@
 package es.masanz.PROYDAM2.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
+
 import es.masanz.PROYDAM2.model.entity.Bicicleta;
 import es.masanz.PROYDAM2.model.entity.Usuario;
 import es.masanz.PROYDAM2.model.service.VistaService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 @Controller
 public class VistaController {
@@ -94,7 +101,7 @@ public class VistaController {
             @RequestParam(required = false) String tipo,
             @RequestParam(required = false) Double precioMax,
             @RequestParam(required = false) List<String> marca,
-            @RequestParam(required = false, defaultValue = "false") boolean soloEnStock,
+            @RequestParam(required = false, defaultValue = "false") boolean stock,
             Model model, HttpSession session) {
         String uid = (String) session.getAttribute("uid");
 
@@ -119,11 +126,11 @@ public class VistaController {
             precioMax = 20000.0;
         }
 
-        if (soloEnStock) {
-            model.addAttribute("soloEnStock", soloEnStock);
+        if (stock) {
+            model.addAttribute("stock", stock);
         }
 
-        List<Bicicleta> bicicletas = vistaService.filtrarProductos(tipo, precioMax, marca, soloEnStock);
+        List<Bicicleta> bicicletas = vistaService.filtrarProductos(tipo, precioMax, marca, stock);
         model.addAttribute("bicicletas", bicicletas);
 
         return "catalogo";
@@ -288,7 +295,13 @@ public class VistaController {
     }
 
     @GetMapping("/soporte")
-    public String verSoporte() {
+    public String verSoporte(HttpSession session, Model model) {
+        String rol = (String) session.getAttribute("rol");
+        if (rol == null || !rol.equals("admin")) {
+            return "soporte";
+        }
+
+        model.addAttribute("admin", true);
         return "soporte";
     }
 }

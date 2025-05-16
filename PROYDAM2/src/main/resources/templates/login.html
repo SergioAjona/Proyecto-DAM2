@@ -25,16 +25,15 @@
   </div>
 
   <form th:action="@{/login}" th:object="${Usuario}" method="post">
-    <ul>
-      <li>
-        <label for="email">Correo electrónico:</label>
-        <input type="text" id="email" th:field="*{email}" required />
-      </li>
-      <li>
-        <label for="contraseña">Contraseña:</label>
-        <input type="password" id="contraseña" th:field="*{contrasena}" required />
-      </li>
-    </ul>
+    <div>
+      <label for="email">Correo electrónico:</label>
+      <input type="text" id="email" th:field="*{email}" required />
+    </div>
+    
+    <div>
+      <label for="contraseña">Contraseña:</label>
+      <input type="password" id="contraseña" th:field="*{contrasena}" required />
+    </div>
     <button type="submit">ENTRAR</button>
   </form>
 
