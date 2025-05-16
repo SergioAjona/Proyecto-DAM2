@@ -13,6 +13,7 @@ public class Usuario {
     private String email;
     private int telefono;
     private String ciudad;
+    private boolean verificado;
     private List<Bicicleta> carrito = new ArrayList<>();
 
     public String getId() {
@@ -77,6 +78,14 @@ public class Usuario {
 
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
+    }
+
+    public boolean isVerificado() {
+        return verificado;
+    }
+
+    public void setVerificado(boolean verificado) {
+        this.verificado = verificado;
     }
 
     public List<Bicicleta> getCarrito() {

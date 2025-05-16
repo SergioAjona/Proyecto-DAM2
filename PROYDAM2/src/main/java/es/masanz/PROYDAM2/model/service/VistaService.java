@@ -4,6 +4,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
 import com.lowagie.text.DocumentException;
@@ -37,15 +38,21 @@ public class VistaService {
     private SpringTemplateEngine templateEngine;
 
     private FirebaseService fb = new FirebaseService();
+    @Autowired
+    private MensajeService mensajeService = new MensajeService();
 
     public String registrarUsuario(Usuario usuario) throws Exception {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                 .setEmail(usuario.getEmail())
                 .setPassword(usuario.getContrasena());
 
-        UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
-        String uid = userRecord.getUid();
+        UserRecord userRecord = auth.createUser(request);
 
+        String link = auth.generateEmailVerificationLink(usuario.getEmail());
+        mensajeService.enviarVerificacion(usuario.getEmail(), link);
+
+        String uid = userRecord.getUid();
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("id", uid);
         userMap.put("nombre", usuario.getNombre());
@@ -55,33 +62,73 @@ public class VistaService {
         userMap.put("ciudad", usuario.getCiudad());
         userMap.put("dni", usuario.getDni());
         userMap.put("telefono", usuario.getTelefono());
+        userMap.put("verificado", false);
 
         fb.getFirestore().collection("usuarios").document(uid).set(userMap);
 
         return uid;
     }
 
-    public String logearUsuario(String email, String password) throws IOException, JSONException {
+    public boolean verificarYRegistrarEnFirestore(String email) throws Exception {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        UserRecord userRecord = auth.getUserByEmail(email);
+
+        if (userRecord.isEmailVerified()) {
+            String uid = userRecord.getUid();
+
+            // Actualizar campo "verificado" en Firestore
+            ApiFuture<WriteResult> writeResult = fb.getFirestore()
+                    .collection("usuarios")
+                    .document(uid)
+                    .update("verificado", true);
+
+            // Asegúrate de que la actualización se realizó correctamente
+            writeResult.get();  // Espera a que se complete la actualización
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public String autenticarUsuario(String email, String password) throws Exception {
         String apiKey = "AIzaSyCjzd8E1YA34ayRIrENxIEP9ifQAD83xns";
         URL url = new URL("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey);
-
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
 
-        String payload = String.format("{\"email\":\"%s\",\"password\":\"%s\",\"returnSecureToken\":true}", email, password);
-        OutputStream os = conn.getOutputStream();
-        os.write(payload.getBytes());
-        os.flush();
+        String payload = String.format(
+                "{\"email\":\"%s\",\"password\":\"%s\",\"returnSecureToken\":true}",
+                email, password
+        );
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String response = in.lines().collect(Collectors.joining());
-        in.close();
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(payload.getBytes());
+            os.flush();
+        }
+
+        if (conn.getResponseCode() != 200) {
+            throw new Exception("Credenciales inválidas.");
+        }
+
+        String response;
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+            response = in.lines().collect(Collectors.joining());
+        }
 
         JSONObject jsonResponse = new JSONObject(response);
-        String idToken = jsonResponse.getString("idToken");
         String uid = jsonResponse.getString("localId");
+
+        verificarYRegistrarEnFirestore(email);
+
+        DocumentSnapshot doc = fb.getFirestore().collection("usuarios").document(uid).get().get();
+        Boolean estaVerificado = doc.getBoolean("verificado");
+
+        if (estaVerificado == null || !estaVerificado) {
+            throw new Exception("Debes verificar tu correo electrónico antes de iniciar sesión.");
+        }
 
         return uid;
     }

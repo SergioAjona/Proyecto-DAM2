@@ -67,4 +67,13 @@ public class MensajeService {
         fb.getFirestore().collection("mensajes").document(id).delete().get();
     }
 
+    public void enviarVerificacion(String to, String link) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Verifica tu cuenta");
+        message.setText("Gracias por registrarte. Por favor verifica tu email haciendo clic en el siguiente enlace:\n\n" + link);
+
+        mailSender.send(message);
+    }
+
 }

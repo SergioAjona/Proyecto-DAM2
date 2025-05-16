@@ -47,7 +47,7 @@ public class VistaController {
             vistaService.registrarUsuario(usuario);
             return "redirect:/login";
         } catch (Exception e) {
-            model.addAttribute("error", "Error al registrar usuario");
+            model.addAttribute("error", "Error al registrar usuario" + e.getMessage());
             return "registro";
         }
     }
@@ -66,29 +66,26 @@ public class VistaController {
     @PostMapping("/login")
     public String login(@ModelAttribute Usuario usuario, HttpSession session, Model model) {
         try {
-            // Login con Firebase (esto ya lo tienes)
-            String uid = vistaService.logearUsuario(usuario.getEmail(), usuario.getContrasena());
+            String uid = vistaService.autenticarUsuario(usuario.getEmail(), usuario.getContrasena());
 
-            // Obtener rol desde Firestore
+            // Buscar usuario en Firestore
             Firestore db = FirestoreClient.getFirestore();
             DocumentReference userRef = db.collection("usuarios").document(uid);
             DocumentSnapshot snapshot = userRef.get().get();
 
-            if (!snapshot.exists()) {
-                model.addAttribute("error", "Usuario no encontrado en Firestore");
-                return "login";
-            }
+            String rol = snapshot.exists() ? snapshot.getString("rol") : "cliente";
+            String nombre = snapshot.exists() ? snapshot.getString("nombre") : usuario.getNombre();
+            String apellido = snapshot.exists() ? snapshot.getString("apellido") : usuario.getApellido();
 
-            String rol = snapshot.getString("rol");
-            if (rol == null) rol = "cliente";
-
-            // Guardar en sesión
             session.setAttribute("uid", uid);
             session.setAttribute("rol", rol);
+            session.setAttribute("nombre", nombre);
+            session.setAttribute("apellido", apellido);
 
             return "redirect:/";
+
         } catch (Exception e) {
-            model.addAttribute("error", "Credenciales inválidas o error al autenticar");
+            model.addAttribute("error", e.getMessage());
             return "login";
         }
     }
